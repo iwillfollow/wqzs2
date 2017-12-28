@@ -1,0 +1,273 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>鸿信天翼定位软件</title>
+<link href="homecss/website.css" rel="stylesheet" type="text/css">
+<link rel="Shortcut Icon" href="images/favicon.ico" type="image/x-icon" />
+<script type="text/javascript" src="resource/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="resource/js/jquery.cookie.js"/></script>
+<script type="text/javascript" src="resource/js/jquery.flexslider-min.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.flexslider').flexslider({
+		directionNav: true,
+		pauseOnAction: false
+	});
+	checkCookie();
+});
+
+function checkCookie() {
+	var name = $.cookie("loginUserName");
+	alert("name:" + name);
+	if (name != null) {
+		$("#loginname").val(name);
+		$("#recordName").attr("checked", true);
+	} else {
+		$("#loginname").val("");
+		$("#recordName").attr("checked", false);
+	}
+	
+	var password = $.cookie("loginPassword");
+	alert("password:" + password);
+	if (password != null) {
+		$("#password").val(password);
+		$("#recordPassword").attr("checked", true);
+	} else {
+		$("#password").val("");
+		$("#recordPassword").attr("checked", false);
+	}
+}
+
+function loadimage(){
+    document.getElementById("auimg").src="authimg.gif?"+Math.random();
+}
+
+function showimage(){
+	var _auimg = document.getElementById("auimg");
+	if(_auimg.style.display == 'none'){
+		_auimg.src="authimg.gif?"+Math.random();
+		_auimg.style.display = '';
+	}
+}
+    
+function cls(){
+	//捕获触发事件的对象，并设置为以下语句的默认对象 
+	var elm = window.event.srcElement;
+	if (elm.value == "请输入用户名" || elm.value == "请输入密码" || elm.value == "请输入验证码"){
+		elm.value = "";
+	}
+}
+
+function blr(){
+	var elm = window.event.srcElement;
+	if (elm.value == ""){
+		if (elm.id == "loginname"){
+			elm.value = "请输入用户名";
+		} 
+		if (elm.id == "password"){
+			elm.value = "请输入密码";
+		}
+		if (elm.id == "authcode"){
+			elm.value = "请输入验证码";
+		}
+	}
+}
+
+function showIOS() {
+	document.getElementById("nero_01").style.display = "block";
+	document.getElementById("nero_02").style.display = "none";
+}
+
+function showAnroid() {
+	document.getElementById("nero_01").style.display = "none";
+	document.getElementById("nero_02").style.display = "block";
+}
+
+function doLogin(){
+	// var type = document.getElementById("type").value;
+	if(check()){
+		if ($("#recordName").attr("checked") || $("#recordName").attr("checked") == "checked") {
+			$.cookie("loginUserName",$("#loginname").val(),{ path: '/', expires: 10 });
+		} else {
+			$.cookie("loginUserName", null,{ path: '/' });
+			alert("name:" + $.cookie("loginUserName"));
+		}
+		if ($("#recordPassword").attr("checked") || $("#recordPassword").attr("checked") == "checked") {
+			$.cookie("loginPassword",$("#password").val(),{ path: '/', expires: 10 });
+		} else {
+			$.cookie("loginPassword", null,{ path: '/' });
+			alert("password:" + $.cookie("loginPassword"));
+		}
+	}
+}
+
+/* 校验*/
+function check() {
+   	var p1 = /^[A-Z|a-z|0-9|_]{1,20}$/; //测试用户名
+   	var p2 = /^[A-Z|a-z|0-9|_]{6,18}$/; //测试密码
+
+   	var name = document.getElementById("loginname");
+   	var password = document.getElementById("password");
+   	var authcode = document.getElementById("authcode");
+   	
+   	if (name.value == "" || name.value == "请输入用户名")
+   	{
+   		alert("用户名不能为空");
+   		name.focus();
+   		return false;
+   	}
+   	if (password.value == "" || password.value == "请输入密码")
+   	{
+   		alert("密码不能为空");
+   		password.focus();
+   		return false;
+   	}
+   	if (authcode.value == "" || authcode.value == "请输入验证码")
+   	{
+   		alert("验证码不能为空");
+   		authcode.focus();
+   		return false;
+   	}
+   	return true;
+}
+
+function keyDown() {  
+    if(window.event.keyCode == 13){
+    	//window.event.keyCode=9;//模拟Tab键
+       	doLogin(); //　当按下"回车键"时执行Submit事件
+	}
+}
+</script>
+</head>
+<body>
+<div class="top">
+	<div class="logo"></div>
+	<div class="tool">
+		<a href="#" class="btn_user">手册</a>
+		<a href="javascript:;" onClick="javascript: showIOS();" class="btn_guide">iOS客户端</a>
+		<a href="javascript:;" onClick="javascript: showAnroid();" class="btn_customer">安卓客户端</a>
+	</div>
+	<div class="nav">
+		<a href="#">首页</a>
+		<a href="#">新闻公告</a>
+		<a href="#">产品下载</a>
+		<a href="#">成功案例</a>
+		<a href="#">关于</a>
+	</div>
+</div>
+<div class="wrap">
+	<div class="ad">
+		<div class="login_pannel" onkeydown="javascript:keyDown();">
+			<table>
+			  <tr>
+			    <th width="30%">用户</th>
+			    <td width="70%"><input type="text" id="loginname" class="text_input" onfocus="cls()" onblur="blr()"></td>
+			  </tr>
+			  <tr>
+			    <th width="30%">密码</th>
+			    <td width="70%"><input type="password" id="password" class="text_input" onfocus="cls()" onblur="blr()"></td>
+			  </tr>
+			  <tr>
+			    <th>验证码</th>
+			    <td><input type="text" id="authcode" class="text_input" style="width: 75px;" onfocus="javascript:showimage();cls();" onblur="blr()">&nbsp;&nbsp;
+				<img id="auimg" style="cursor:pointer;display: none; margin-bottom: -10px;" onclick="javascript:loadimage();" width="40" height="20"></td>
+			  </tr>
+			  <tr>
+			    <td width="70%" colspan="2" style="text-align: center;">
+			      <input type="checkbox" name="recordName" id="recordName" class="checkbox_input">
+			      记住用户&nbsp;&nbsp;
+			      <input type="checkbox" name="recordPassword" id="recordPassword" class="checkbox_input">
+			      记住密码
+			    </td>
+			  </tr>
+			</table>
+			<a href="javascript: doLogin();" class="btn_login">立即登录</a>
+		</div>
+		<div class="flexslider">
+			<ul class="slides">
+				<li><img src="homeimages/ad_01.png" width="1003" height="472"  alt=""/></li>
+				<li><img src="homeimages/ad_02.png" width="1003" height="472"  alt=""/></li>
+				<li><img src="homeimages/ad_03.png" width="1003" height="472"  alt=""/></li>
+				<li><img src="homeimages/ad_04.png" width="1003" height="472"  alt=""/></li>
+			</ul>
+		</div>
+	</div>
+	<div class="news">
+		<div class="news_sub">
+			<a href="#" class="news_sub_c_01"></a>
+			<div class="list_01">
+				<a href="#">怎么保证流畅的使用外勤助手？</a> 
+				<a href="#">外勤助手支持用手机号码登陆 。</a> 
+				<a href="#">销售管理的七个误区</a> 
+			</div>
+		</div>
+		<div class="news_sub">
+			<a href="#" class="news_sub_c_02"></a>
+			<div class="list_01">
+				<a href="#">怎么保证流畅的使用外勤助手？</a> 
+				<a href="#">外勤助手支持用手机号码登陆 。</a> 
+				<a href="#">销售管理的七个误区</a> 
+			</div>
+		</div>
+		<div class="news_sub">
+			<a href="#" class="news_sub_c_03"></a>
+			<div class="list_01">
+				<a href="#">怎么保证流畅的使用外勤助手？</a> 
+				<a href="#">外勤助手支持用手机号码登陆 。</a> 
+				<a href="#">销售管理的七个误区</a> 
+			</div>
+		</div>
+		<div class="news_sub end">
+			<a href="#" class="news_sub_c_04"></a>
+			<div class="list_01">
+				<a href="#">怎么保证流畅的使用外勤助手？</a> 
+				<a href="#">外勤助手支持用手机号码登陆 。</a> 
+				<a href="#">销售管理的七个误区</a> 
+			</div>
+		</div>
+	</div>
+	<div class="service">
+		<a class="service_sub" href="#"><img src="homeimages/nero.png" width="69" height="69"  alt=""/><p><b class="wx">外勤助手微信平台</b>waiqin.weixin.com</p></a>
+		<a class="service_sub" href="#"><img src="homeimages/nero.png" width="69" height="69"  alt=""/><p><b class="yx">外勤助手易信平台</b>waiqin.yixin.com</p></a>
+		<a class="service_sub" href="#"><img src="homeimages/qq.png" width="69" height="69"  alt=""/><p><b class="qq">QQ客服</b>892323723</p></a>
+		<a class="service_sub" href="#"><img src="homeimages/frees.png" width="69" height="69"  alt=""/><p><b class="fzz">全国400免费服务热线</b>400-800-8273</p></a>
+	</div>
+</div>
+<div class="footer">
+	<span>版权所有：CopyRight 2012-2014</span><span>中国电信股份有限公司保留所有权利</span><span>[增值电信业务经营许可证A2.B1-20090001]</span><br>
+	<span>微信公众号[外勤助手官方平台]</span><span>易信公众号[外勤助手官方平台]</span><br>
+	<span>QQ客服号码：892323723</span><span>400客服电话：400-800-8273</span>
+</div>
+<div id="nero_01" style="display:none">
+	<div class="nero_01_content" id="nero_01_content">
+		<div class="nero_01_content_area">
+			<a href="javascript:;" onClick="nero_01.style.display='none';" class="pop_close" title="关闭。"></a>
+			<div class="dldt_01"></div>
+			<div class="dldt_02"><img src="homeimages/nero.png" width="90" height="90" /></div>
+			<div class="dldt_03">
+				<input name="" type="text" value="输入手机号码"/>
+			</div>
+			<a class="dldt_b_at01 dldt_b" href="#">本地下载</a>
+			<a class="dldt_b_at02 dldt_b" href="#">二维码下载</a>
+			<a class="dldt_b_at03 dldt_b" href="#">短信下载</a>
+		</div>
+	</div>
+</div>
+<div id="nero_02" style="display:none">
+	<div class="nero_02_content" id="nero_02_content">
+		<div class="nero_02_content_area">
+			<a href="javascript:;" onClick="nero_02.style.display='none';" class="pop_close" title="关闭。"></a>
+			<div class="dldt_01"></div>
+			<div class="dldt_02"><img src="homeimages/nero.png" width="90" height="90" /></div>
+			<div class="dldt_03">
+				<input name="" type="text" value="输入手机号码"/>
+			</div>
+			<a class="dldt_b_at01 dldt_b_02" href="#">本地下载</a>
+			<a class="dldt_b_at02 dldt_b_02" href="#">二维码下载</a>
+			<a class="dldt_b_at03 dldt_b_02" href="#">短信下载</a>
+		</div>
+	</div>
+</div>
+</body>
+</html>
